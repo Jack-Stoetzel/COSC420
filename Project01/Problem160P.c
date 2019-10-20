@@ -98,10 +98,10 @@ int main(int argc, char *argv[])
             result /= 10;
         }
         // Reduces result to 5 digits
-        while(result / fact > 1)
+        while(result / 100000 > 1)
         {
             //puts("Loop 2");
-            result = result % fact;
+            result = result % 100000;
         }
     }
     printf ("Rank %ld   %ld - %ld = %ld\n", rank, lower, upper, result);
@@ -110,9 +110,6 @@ int main(int argc, char *argv[])
     MPI_Gather(&result, 1, MPI_LONG_LONG, finalArr, 1, MPI_LONG_LONG, 0, comm);
 
     //***************Reducing each nodes results****************
-
-
-
     for(i = 0; i < world; i++)
     {
         if(rank == 0)
@@ -132,11 +129,8 @@ int main(int argc, char *argv[])
 
     if(rank==0)
     {
-        int fd1 = open("Out.txt", O_WRONLY || O_CREAT || O_EXCL, 0777);
-        dup2(fd1, 1);
         printf("The factorials 5 trailing digits are %1.0ld. \n",total);
         MPI_Finalize();
-        close(fd1);
         return 0;
     }
     return 0;
