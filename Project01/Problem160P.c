@@ -25,19 +25,11 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
-#include <fcntl.h>
+#include <math.h>
 #include "mpi.h"
 
 int main(int argc, char *argv[])
 {
-    long long fact;
-    long long lower,upper;
-    long long i;
-    long long result = 1;
-    long long total = 1;
-
-
     MPI_Init(NULL, NULL);
 
     //----------------------------------------------------------
@@ -52,15 +44,23 @@ int main(int argc, char *argv[])
     MPI_Comm_rank(comm, &rank);
     //----------------------------------------------------------
 
+    long long fact;
+    long long lower,upper;
+    long long i;
+    long long result = 1;
+    long long total = 1;
 
     if(rank==0)
     {
-        fact = atoi(argv[1]);
+        fact = 1000000000000;
+
+        fact = fact / 78125;
+        //printf("Num = %ld\n\n", fact);
     }
 
     long long* finalArr = malloc(world * sizeof(long long));
 
-    MPI_Bcast(&fact, 1, MPI_INT, 0, MPI_COMM_WORLD);
+    MPI_Bcast(&fact, 1, MPI_LONG_LONG, 0, MPI_COMM_WORLD);
 
     //*****************Dividing work to nodes*******************
 
@@ -98,13 +98,13 @@ int main(int argc, char *argv[])
             result /= 10;
         }
         // Reduces result to 5 digits
-        while(result / 100000 > 1)
+        while(result / fact > 1)
         {
             //puts("Loop 2");
-            result = result % 100000;
+            result = result % fact;
         }
     }
-    printf ("Rank %ld   %ld - %ld = %ld\n", rank, lower, upper, result);
+    //printf ("Rank %ld   %ld - %ld = %ld\n", rank, lower, upper, result);
 
 
     MPI_Gather(&result, 1, MPI_LONG_LONG, finalArr, 1, MPI_LONG_LONG, 0, comm);
@@ -112,8 +112,8 @@ int main(int argc, char *argv[])
     //***************Reducing each nodes results****************
     for(i = 0; i < world; i++)
     {
-        if(rank == 0)
-            printf("arr = %ld \n",  finalArr[i]);
+        //if(rank == 0)
+            //printf("arr = %ld \n",  finalArr[i]);
 
         total *= finalArr[i];
 
