@@ -9,8 +9,7 @@ So every word is calculated 2002 times over.
 * Once for reading in the word
 * Once for calulating without numbers
 * And the 2000 for numbers being attached to both sides (1000 numbers on the front, and 1000 numbers on the back).
-
-
+Therefore, the time complexity of the algorithm in best case and worst case respectively is: O(n*2002), O((n * size of dicitonary * 2002)/# of processors).
 
 ### According to the data, does adding more nodes perfectly divide the time taken by the program?
 
@@ -24,8 +23,6 @@ Currently the program divides works in the following way:
   * Odd nodes will be used to compute words with numbers attached to the begining. Ex) 123password
   
 So with large sets of nodes, the program runs very inefficiently. 
-
-
 
 ### Consider the problem of brute-forcing passwords under only maximum string length. How much time would it take to complete this hack, extrapolating from your measurements?
 
@@ -43,7 +40,7 @@ For anyone to use this and get results in a reasonable amount of time, the work 
 ### How could the code be improved in terms of usability, efficiency, and robustness?
 
 As stated in the second question, there is a lot of inefficency with how the work is divided.
-To imporve this, more nodes could be allocated to computing words with no numbers attached. 
+To improve this, more nodes could be allocated to computing words with no numbers attached. 
 Though that would take away from the computations on words with numbers attached, there could be a formula to determine an optimal amount to allocate for each operation so that all three parts finish in relativley the same amount of time.
 
 This could also be improved in with more effcient file reading. 
