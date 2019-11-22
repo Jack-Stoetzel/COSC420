@@ -69,3 +69,14 @@ If this was done in parallel, that would significantly increase the overall spee
 Another change to increase usablitity would be to read from a shadow file. 
 For the sake of time, we hard coded the salt and the passwords in the shadow file.
 If this was read from an actual shadow file, the usability could universal for any shadow file.
+
+````
+Dictionary has been read in.
+
+bob      $1$ab$0I4CGceZU1wOu9PO3qn2p/ == fluffy
+maria    $1$ab$DC1ifnjzzu8Za5qEt96Kq0 == password123
+alice    $1$ab$DqPMoPPboZ2HTH7RfiqQs. == 99puppy
+rmshifler        $1$ab$/rOLL5LFn/3ZIa2TFnN4G. == 1genius
+jtanderson       $1$ab$Po1AuQSRCorWXHi8cIOhK/ == 100nodes
+george   $1$ab$tYl84YhDM6bmCOuCusTKS. == red32
+````
