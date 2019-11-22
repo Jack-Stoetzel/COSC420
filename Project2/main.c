@@ -3,15 +3,15 @@
 #include <fcntl.h>
 
 const int IDSIZE = 32;
-const int TTSIZE = 128;
-const int AUSIZE = 128;
-const int ABSIZE = 2048;
+const int TTSIZE = 256;
+const int AUSIZE = 256;
+const int ABSIZE = 4096;
 
 typedef struct ARTICLES{
     char ID [32];
-    char title[128];
-    char authors[128];
-    char abstract[2048];
+    char title[256];
+    char authors[256];
+    char abstract[4096];
 
 }Articles;
 
