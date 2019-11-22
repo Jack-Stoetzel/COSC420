@@ -1,4 +1,24 @@
-# Lab 04
+### Jack Stoetzel & Lauren Golian
+# Lab 4: Password Cracking
+
+## How to Run This Program
+
+To run this program, use the commands
+
+````
+mpicc working.c -lcrypt
+mpiexec -n <N> a.out
+````
+   
+Where <N> is the number of nodes to run the program on.
+
+## What Does This Program Do?
+
+This program brute forces through a list of passwords by encrypting words from a dictoinary with numbers attached to them.
+The program uses MPI to divide the computations amongst multiple nodes so that the work can be done quicker.
+Currently the encrypted passwords are hard coded to the program and the words.txt file is read in sequentially.
+Once the words are read in, half the nodes check encrypted words with numbers at the begining, and the other half with numbers at the end. 
+If a password is discovered, the username and their encrypted password is printed to the screen.
 
 ## Questions
 
@@ -9,7 +29,9 @@ So every word is calculated 2002 times over.
 * Once for reading in the word
 * Once for calulating without numbers
 * And the 2000 for numbers being attached to both sides (1000 numbers on the front, and 1000 numbers on the back).
-Therefore, the time complexity of the algorithm in best case and worst case respectively is: O(n*2002), O((n * size of dicitonary * 2002)/# of processors).
+
+Therefore, the time complexity of the algorithm in best case and worst case respectively is: 
+O(n*2002), O((n * size of dicitonary * 2002)/# of processors).
 
 ### According to the data, does adding more nodes perfectly divide the time taken by the program?
 
@@ -22,11 +44,7 @@ Currently the program divides works in the following way:
   * Even nodes will be used to compute words with numbers attached to the end. Ex) password123
   * Odd nodes will be used to compute words with numbers attached to the begining. Ex) 123password
   
-So with large sets of nodes, the program runs very inefficiently. 
-
-### Consider the problem of brute-forcing passwords under only maximum string length. How much time would it take to complete this hack, extrapolating from your measurements?
-
-
+So with large sets of nodes, the program runs very inefficiently since the encryption of words with no numbers will take significantly longer. 
 
 ### What are some real-world software examples that would need the above routines? Why? Would they benefit greatly from using your distributed code?
 
