@@ -1,6 +1,11 @@
 // Tree One: Tree of IDs
 // Nodes include Articles and index by thier ID
 
+#include <unistd.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 typedef struct ARTICLES{
     char ID [32];
     char title[256];
@@ -12,15 +17,15 @@ typedef struct ARTICLES{
 typedef struct NODE
 {
     Articles data; //node will store an integer
-    Node* right; // right child
-    Node* left; // left child
-} Node;
+    struct NODE* right; // right child
+    struct NODE* left; // left child
+}wordNode;
 
 //function to create a node
-Node* newNode(Article x)
+wordNode* newNode(Articles x)
 {
-    Node *p;
-    p = malloc(sizeof(Node));
+    wordNode* p;
+    p = malloc(sizeof(wordNode));
     p -> data = x;
     p -> left = NULL;
     p -> right = NULL;
@@ -28,7 +33,7 @@ Node* newNode(Article x)
     return p;
 }
 
-Node* search(Node *root, Articles x)
+wordNode* search(wordNode *root, Articles x)
 {
     if(root == NULL || strcmp((root -> data).ID, x.ID) == 0){ //if root -> data is x then the element is found
         return root;
@@ -41,14 +46,17 @@ Node* search(Node *root, Articles x)
     }
 }
 
-Node* insert(Node *root, int x)
+wordNode* insert(wordNode *root, Articles x)
 {
     //searching for the place to insert
-    if(root == NULL)
+    if(root == NULL){
         return newNode(x);
-    else if(x > root -> data) // x is greater. Should be inserted to right
+    }
+    else if(strcmp(x.ID, (root -> data).ID) == 1){ // x is greater. Should be inserted to right
         root -> right = insert(root -> right, x);
-    else // x is smaller should be inserted to left
+    }
+    else{ // x is smaller should be inserted to left
         root -> left = insert(root -> left, x);
+    }
     return root;
 }
