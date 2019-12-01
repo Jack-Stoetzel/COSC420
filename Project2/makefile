@@ -3,7 +3,7 @@
 search: main.o
 	gcc -o search main.o
 
-main.o: main.c
+main.o: main.c tree.h
 	gcc -c main.c
 
 clean:
