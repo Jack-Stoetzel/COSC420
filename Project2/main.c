@@ -12,8 +12,9 @@ const int ABSIZE = 4096;
 
 int main(){
     // 1,614,712
+    // Root = 1701.01948
     Articles arxiv;
-
+    wordNode *wordTree;
     char word[32];
     int meta;
     long long i, k;
@@ -71,11 +72,6 @@ int main(){
                 word[wordPos + i] = buf;
             }
             else if(buf == ' ' && i > 1){
-                //printf("%s ", word);        // printf("%s \n", arxiv.ID);
-        // printf("%s \n", arxiv.title);
-        // printf("%s \n", arxiv.authors);
-        // printf("%s \n", arxiv.abstract);
-        // puts("");
                     // Add word to tree w/ article ID
                 wordPos = (i + 1) * (-1);
                 memset(word, 0, sizeof(word));
@@ -97,13 +93,14 @@ int main(){
             read(meta, &buf, 1);
         }
 
-        printf("%s \n", arxiv.ID);
-        printf("%s \n", arxiv.title);
-        printf("%s \n", arxiv.authors);
-        printf("%s \n", arxiv.abstract);
-        puts("");
+        // printf("%s \n", arxiv.ID);
+        // printf("%s \n", arxiv.title);
+        // printf("%s \n", arxiv.authors);
+        // printf("%s \n", arxiv.abstract);
+        // puts("");
 
         // Add arxiv to the article tree
+
 
         memset(arxiv.ID, 0, sizeof(arxiv.ID));
         memset(arxiv.title, 0, sizeof(arxiv.title));
