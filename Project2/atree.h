@@ -10,7 +10,7 @@ typedef enum COLOR{
 	RED, BLACK
 }Color;
 
-typedef struct ARTICLES{
+typedef struct ARTICLE{
     char ID [32];
     char title[256];
     char authors[256];
@@ -132,9 +132,6 @@ void insert(ArticleNode *root, Article* article)
 	// Initialize newNode and it's members
     ArticleNode *newNode = (ArticleNode*) malloc(sizeof(ArticleNode));
 	newNode -> article = (Article*) malloc(sizeof(article));
-    newNode -> left = (ArticleNode*) malloc(sizeof(ArticleNode));
-	newNode -> right = (ArticleNode*) malloc(sizeof(ArticleNode));
-	newNode -> parent = (ArticleNode*) malloc(sizeof(ArticleNode));
 
 	// Copy info from Article objetc to new nodde
     strcpy(newNode -> article -> ID, article -> ID);
@@ -148,8 +145,10 @@ void insert(ArticleNode *root, Article* article)
     // If the tree is empty
     if (root == NULL)
     {
+		puts("Calling");
         newNode -> color = BLACK;
         root = newNode;
+		printf("Insert root = %s \n", root -> article -> ID);
     }
     else
     {
