@@ -70,7 +70,6 @@ Another change to increase usablitity would be to read from a shadow file.
 For the sake of time, we hard coded the salt and the passwords in the shadow file.
 If this was read from an actual shadow file, the usability could universal for any shadow file.
 
-
 ## Output
 
 ````

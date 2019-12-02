@@ -62,6 +62,7 @@ int main(int argc, char* argv[])
 	//char salt[] = "$5$ab$";
 	//char* shadows[] = {"$5$ab$X6moXMBmKxEkH6XrCqHvFXTB.5WeyWWTVFqahh.BFRD", "$5$ab$xhzLWNRyZfrtjyG6HBQ48t3KCK2j4qsqDRQMNGVn6A9", "$5$ab$Uy4WKL6KBnQ.xNa5b7ZCbpKX2DPVRsKUa.ssXclDUfA", "$5$ab$ay/R9ygZUsjXmksQvlpMzbdtYBjOUvlEVCj9IaM.cnB", "$5$ab$S0uPEMdp1nHs/MmB1XVeM1jqyEnhs4z9BZe.08jFlA7", "$5$ab$rHFkI2ust2fsZNNEkYk2ImkYbTmovoMvdjlA9ozPdX4", "$5$ab$DhS5P8WyMpT9FTovr8UrllCCGAOJHAVH0549zC9TVv.", "$5$ab$Te3DSDggFW3Ds0/Hq9SxxBQITs/opgC8.xuAl1fzxo9", "$5$ab$QmqcXXxcIt2UTSMrmw9cgz7eHpE4249XesQyoQePW79", "$5$ab$is9fvJL/y3aTsrTiNWu0biOZpa2xoFqfsstktXGM3V3", "$5$ab$eLAaVmRnryQpC5JcvxLyJxM7oXYcODXUa4KM10dw/s9"};
 	char salt[] = "$1$ab$";
+	char* names[] = {"george", "maria", "alice", "bob", "despickler", "richard", "rmshifler", "yxjing", "jtanderson", "bfpierce", "rmstallman"};
 	char* shadows[] = {"$1$ab$tYl84YhDM6bmCOuCusTKS.", "$1$ab$DC1ifnjzzu8Za5qEt96Kq0", "$1$ab$DqPMoPPboZ2HTH7RfiqQs.", "$1$ab$0I4CGceZU1wOu9PO3qn2p/", "$1$ab$FPyWVGc2x83IsQ7.q775k1", "$1$ab$T/Cabrtf2TgOYXhZFlRct/", "$1$ab$/rOLL5LFn/3ZIa2TFnN4G.", "$1$ab$N9t.xxEuc93HGa.twsZuP.", "$1$ab$Po1AuQSRCorWXHi8cIOhK/", "$1$ab$s2uqC2lMivvj9IX5PQ8KO/", "$1$ab$tThrUGNaCZBr224TYwxw2."};
 
 	//**********************************************************************************
@@ -84,6 +85,8 @@ int main(int argc, char* argv[])
 		//printf("%s \n", word);
 		strcpy(words[i],word);
 	}
+	if(rank == 0)
+	    puts("Dictionary has been read in. \n");
 
 	//**********************************************************************************
 
@@ -130,7 +133,6 @@ int main(int argc, char* argv[])
 	//**********************************************************************************
 
 	// One loop where every node starts and ends at different points
-	dup2(outfile, 1);
 	for(i = displs[rank]; i < (displs[rank] + sendCounts[rank]); i++){
 		// Even nodes compute the suffix numbers on every word	ex. password123
 		if(rank % 2 == 0 && rank < (world - mid)){
@@ -146,8 +148,7 @@ int main(int argc, char* argv[])
 				char *pass = crypt(temp, salt);      // Encrypts a word from the file
 				for(k = 0; k < 11; k++){            // Checks that word to every password in the shadow file
 					if(strcmp(shadows[k], pass) == 0){
-						dup2(outfile, 1);
-						printf("%s == %s \n", shadows[k], temp);
+						printf("%s \t %s == %s \n", names[k], shadows[k], temp);
 					}
 				}
 			}
@@ -166,7 +167,7 @@ int main(int argc, char* argv[])
 				char *pass = crypt(temp, salt);      // Encrypts a word from the file
 				for(k = 0; k < 11; k++){            // Checks that word to every password in the shadow file
 					if(strcmp(shadows[k], pass) == 0){
-						printf("%s == %s \n", shadows[k], temp);
+						printf("%s \t %s == %s \n", names[k], shadows[k], temp);
 					}
 				}
 			}
@@ -176,7 +177,7 @@ int main(int argc, char* argv[])
 			char *pass = crypt(words[i], salt);      // Encrypts a word from the file
 			for(k = 0; k < 11; k++){            // Checks that word to every password in the shadow file
 				if(strcmp(shadows[k], pass) == 0){
-					printf("%s == %s \n", shadows[k], words[i]);
+					printf("%s \t %s == %s \n", names[k], shadows[k], words[i]);
 				}
 			}
 		}
