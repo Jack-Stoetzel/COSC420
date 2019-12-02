@@ -24,13 +24,13 @@ int main(){
     // 1,614,712
     // Root = 1701.01948
     Article arxiv;
-    memset(arxiv.ID, 0, sizeof(arxiv.ID));
-    memset(arxiv.title, 0, sizeof(arxiv.title));
-    memset(arxiv.authors, 0, sizeof(arxiv.authors));
-    memset(arxiv.abstract, 0, sizeof(arxiv.abstract));
+    memset(arxiv.ID, '\0', sizeof(arxiv.ID));
+    memset(arxiv.title, '\0', sizeof(arxiv.title));
+    memset(arxiv.authors, '\0', sizeof(arxiv.authors));
+    memset(arxiv.abstract, '\0', sizeof(arxiv.abstract));
 
     ArticleNode *root = NULL;
-    char word[32];
+    char word[64];
     int meta;
     long long i, k;
 
@@ -51,6 +51,7 @@ int main(){
             arxiv.ID[i] = buf;
             read(meta, &buf, 1);
         }
+        arxiv.ID[i] = '\0';
         if(i == IDSIZE){
             for(i = 0; buf != '\n'; i++){
                 read(meta, &buf, 1);
@@ -62,6 +63,7 @@ int main(){
             arxiv.title[i] = buf;
             read(meta, &buf, 1);
         }
+        arxiv.title[i] = '\0';
         if(i == TTSIZE){
             for(i = 0; buf != '\n'; i++){
                 read(meta, &buf, 1);
@@ -73,13 +75,12 @@ int main(){
             arxiv.authors[i] = buf;
             read(meta, &buf, 1);
         }
+        arxiv.authors[i] = '\0';
         if(i == AUSIZE){
             for(i = 0; buf != '\n'; i++){
                 read(meta, &buf, 1);
             }
         }
-        printf("%s\n", arxiv.ID);
-        sleep(5);
         // Parsing the article's abstract
         int wordPos = -2;
         read(meta, &buf, 1);
@@ -98,8 +99,7 @@ int main(){
             arxiv.abstract[i] = buf;
             read(meta, &buf, 1);
         }
-        printf("%s\n", arxiv.ID);
-        sleep(5);
+        arxiv.abstract[i] = '\0';
         if(i == ABSIZE){
             for(i = 0; buf != '\n'; i++){
                 read(meta, &buf, 1);
@@ -111,7 +111,7 @@ int main(){
             read(meta, &buf, 1);
         }
 
-        printf("%s \n", arxiv.ID);
+        //printf("%s \n", arxiv.ID);
         // printf("%s \n", arxiv.title);
         // printf("%s \n", arxiv.authors);
         // printf("%s \n", arxiv.abstract);
@@ -119,11 +119,11 @@ int main(){
 
         // Add arxiv to the article tree
         insert(root, &arxiv);
-
-        memset(arxiv.ID, 0, sizeof(arxiv.ID));
-        memset(arxiv.title, 0, sizeof(arxiv.title));
-        memset(arxiv.authors, 0, sizeof(arxiv.authors));
-        memset(arxiv.abstract, 0, sizeof(arxiv.abstract));
+        printf("main root = %s\n", root -> article -> ID);
+        memset(arxiv.ID, '\0', sizeof(arxiv.ID));
+        memset(arxiv.title, '\0', sizeof(arxiv.title));
+        memset(arxiv.authors, '\0', sizeof(arxiv.authors));
+        memset(arxiv.abstract, '\0', sizeof(arxiv.abstract));
     }
     inorder(root);
     //printf("%c \n", buf);
