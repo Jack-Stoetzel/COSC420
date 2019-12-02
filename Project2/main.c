@@ -1,20 +1,30 @@
+// TODO
+// 1. TEST THIS RB tree
+// 2. Test inserting all articles into the list and searching an article ID
+// 3. If the first RB tree works, make another for words with a LL for IDs with that word
+//
+// EXTA
+// Compute the adjacentcy matrix as we insert IDs into the the word list
+
 #include <fcntl.h>
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "tree.h"
+#include "atree.h"
 
 const int IDSIZE = 32;
 const int TTSIZE = 256;
 const int AUSIZE = 256;
 const int ABSIZE = 4096;
 
+
+
 int main(){
     // 1,614,712
     // Root = 1701.01948
-    Articles arxiv;
-    wordNode *wordTree;
+    Article arxiv;
+
     char word[32];
     int meta;
     long long i, k;
