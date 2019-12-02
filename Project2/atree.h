@@ -25,8 +25,6 @@ typedef struct ANODE
     struct ANODE *left, *right, *parent;
 }ArticleNode;
 
-
-// Left Rotation
 void leftRotate(ArticleNode *root, ArticleNode *node)
 {
     ArticleNode *y = node -> right;
@@ -55,8 +53,6 @@ void leftRotate(ArticleNode *root, ArticleNode *node)
     node -> parent = y;
 }
 
-
-// Right Rotation (Similar to LeftRotate)
 void rightRotate(ArticleNode *root,ArticleNode *node)
 {
     ArticleNode *y = node -> left;
@@ -84,7 +80,6 @@ void rightRotate(ArticleNode *root,ArticleNode *node)
     node -> parent = y;
 }
 
-// Utility function to fixup the Red-Black tree after standard BST insertion
 void insertFixUp(ArticleNode *root, ArticleNode *node)
 {
     while(node -> parent -> color == RED)
@@ -134,8 +129,14 @@ void insertFixUp(ArticleNode *root, ArticleNode *node)
 
 void insert(ArticleNode *root, Article* article)
 {
-    ArticleNode *newNode = (ArticleNode*)malloc(sizeof(ArticleNode));
+	// Initialize newNode and it's members
+    ArticleNode *newNode = (ArticleNode*) malloc(sizeof(ArticleNode));
+	newNode -> article = (Article*) malloc(sizeof(article));
+    newNode -> left = (ArticleNode*) malloc(sizeof(ArticleNode));
+	newNode -> right = (ArticleNode*) malloc(sizeof(ArticleNode));
+	newNode -> parent = (ArticleNode*) malloc(sizeof(ArticleNode));
 
+	// Copy info from Article objetc to new nodde
     strcpy(newNode -> article -> ID, article -> ID);
     strcpy(newNode -> article -> title, article -> title);
     strcpy(newNode -> article -> authors, article -> authors);
@@ -184,13 +185,11 @@ void insert(ArticleNode *root, Article* article)
     }
 }
 
-// A utility function to traverse Red-Black tree in inorder fashion
 void inorder(ArticleNode *root)
 {
-    //printf("%s ", root);
-    if (root == NULL)
-        return;
-    inorder(root -> left);
-    printf("%s ", root -> article -> ID);
-    inorder(root -> right);
+    if (root != NULL){
+    	inorder(root -> left);
+    	printf("%s ", root -> article -> ID);
+    	inorder(root -> right);
+	}
 }
