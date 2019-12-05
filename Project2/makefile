@@ -1,8 +1,8 @@
-search: main.o
-	gcc -o search main.o
+search: main2.o
+	gcc -o search main2.o
 
-main.o: main.c atree.h
-	gcc -c main.c
+main2.o: main2.c atree.h
+	gcc -c main2.c
 
 clean:
 	rm search *.o
