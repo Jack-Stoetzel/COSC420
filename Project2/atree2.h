@@ -79,7 +79,7 @@ void rightRotate(ArticleNode **root, ArticleNode *node)
 	if(y -> parent == NULL){
 		(*root) = y;
 	}
-	else if(node = node -> parent -> left){
+	else if(node == node -> parent -> left){
 		node -> parent -> left = y;
 	}
 	else{
@@ -168,7 +168,7 @@ void insert(ArticleNode **root, Article* data)
 
 	strcpy(newNode -> article -> ID, data -> ID);
 	strcpy(newNode -> article -> title, data -> title);
-	printf("%d =? %d\n",data -> authorSize, sizeof(newNode -> article -> authors));
+	printf("%d =? %lu\n",data -> authorSize, sizeof(newNode -> article -> authors));
 	//strcpy(newNode -> article -> authors, data -> authors);
 	printf("%s \n", newNode -> article -> title);
 
