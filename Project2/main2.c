@@ -29,7 +29,7 @@ int main(){
 
     ArticleNode *root = NULL;
     int meta;
-    long long i, k;
+    long long i, k = 0;
     char info[37000];
 
     meta = open("arxiv-metadata.txt", O_RDONLY);
@@ -59,29 +59,36 @@ int main(){
         else if(buf == '\n'){
             if(pos == 0){
                 // ID
-                arxiv.ID = (char*) calloc(size[0], sizeof(char));
+                //printf("%d - %s\n", size[0], info);
+                arxiv.IDSize = size[pos];
+                arxiv.ID = (char*) calloc(arxiv.IDSize, sizeof(char));
                 strcpy(arxiv.ID, info);
             }
             else if(pos == 1){
                 // Title
-                arxiv.title = (char*) calloc(size[1], sizeof(char));
+                //printf("%d - %s\n", size[1], info);
+                arxiv.titleSize = size[pos];
+                arxiv.title = (char*) calloc(arxiv.titleSize, sizeof(char));
                 strcpy(arxiv.title, info);
             }
             else if(pos == 2){
                 // Author
-                arxiv.authors = (char*) calloc(size[2], sizeof(char));
+                arxiv.authorSize = size[pos];
+                arxiv.authors = (char*) calloc(arxiv.authorSize, sizeof(char));
                 strcpy(arxiv.authors, info);
             }
             else if(pos == 4){
-                // Insert into Article Tree
+                //printf("Inserting %s\n", arxiv.ID);
+                insert(&root, &arxiv);
+                //puts("\n In-Order \n");
+                //inorder(root);
                 printf("%s \n", arxiv.ID);
-                printf("%s \n", arxiv.title);
-                printf("%s \n\n", arxiv.authors);
+                // printf("%s \n", arxiv.title);
+                // printf("%s \n\n", arxiv.authors);
                 //sleep(2);
                 memset(arxiv.ID, '\0', sizeof(size[0]));
                 memset(arxiv.title, '\0', sizeof(size[1]));
                 memset(arxiv.authors, '\0', sizeof(size[2]));
-                int i;
                 for(i = 0; i < 5; i++){
                     size[i] = 0;
                 }
