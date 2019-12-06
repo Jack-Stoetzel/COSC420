@@ -21,6 +21,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "atree2.h"
+#include "wtree.h"
 
 int main(){
     // 1,614,712
