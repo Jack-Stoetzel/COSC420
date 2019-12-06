@@ -1,6 +1,7 @@
 // Tree One: Tree of IDs
 // Nodes include Articles and index by thier ID
-
+#ifndef ATREE_H
+#define ATREE_H
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -224,3 +225,5 @@ void inorder(ArticleNode *root)
     	inorder(root -> right);
 	}
 }
+
+#endif
