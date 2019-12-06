@@ -169,8 +169,8 @@ void insert(ArticleNode **root, Article* data)
 	strcpy(newNode -> article -> ID, data -> ID);
 	strcpy(newNode -> article -> title, data -> title);
 	printf("%d =? %d\n",data -> authorSize, sizeof(newNode -> article -> authors));
-	strcpy(newNode -> article -> authors, data -> authors);
-	puts("HEre");
+	//strcpy(newNode -> article -> authors, data -> authors);
+	printf("%s \n", newNode -> article -> title);
 
 	newNode -> color = RED;
 	newNode -> left = NULL;
@@ -216,9 +216,7 @@ void insert(ArticleNode **root, Article* data)
         newNode -> left = NULL;
         newNode -> right = NULL;
 		insertFixUp(root, newNode);
-        //free(cursor);
-        //free(pointer);
-        //free(newNode);
+        free(cursor);
     }
 }
 
