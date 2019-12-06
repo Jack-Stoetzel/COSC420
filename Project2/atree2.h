@@ -6,11 +6,13 @@
 #include <stdlib.h>
 #include <string.h>
 
-typedef enum COLOR{
+typedef enum COLOR
+{
 	RED, BLACK
 }Color;
 
-typedef struct ARTICLE{
+typedef struct ARTICLE
+{
     char* ID;
 	int IDSize;
 
@@ -19,7 +21,6 @@ typedef struct ARTICLE{
 
     char* authors;
 	int authorSize;
-
 }Article;
 
 typedef struct ANODE
@@ -161,16 +162,17 @@ void insert(ArticleNode **root, Article* data)
 	ArticleNode* newNode;
 	newNode = (ArticleNode*) malloc(sizeof(ArticleNode));
 	newNode -> article = (Article*) malloc(sizeof(data));
-	// printf("%d - %s\n", sizeof(data -> title), data -> title);
-	newNode -> article -> ID = (char*) malloc(data -> IDSize * sizeof(char));
-	newNode -> article -> title = (char*) malloc(data -> titleSize * sizeof(char));
-	newNode -> article -> authors = (char*) malloc(data -> authorSize * sizeof(char));
 
-	strcpy(newNode -> article -> ID, data -> ID);
-	strcpy(newNode -> article -> title, data -> title);
-	printf("%d =? %lu\n",data -> authorSize, sizeof(newNode -> article -> authors));
+	newNode -> article -> ID = (char*) malloc(data -> IDSize * sizeof(char));
+    printf("%d =? %lu\n",data -> IDSize, sizeof(newNode -> article -> ID));
+	newNode -> article -> title = (char*) malloc(data -> titleSize * sizeof(char));
+    printf("%d =? %lu\n",data -> titleSize, sizeof(newNode -> article -> title));
+	newNode -> article -> authors = (char*) malloc(data -> authorSize * sizeof(char));
+    printf("%d =? %lu\n",data -> authorSize, sizeof(newNode -> article -> authors));
+
+    strcpy(newNode -> article -> ID, data -> ID);
+    strcpy(newNode -> article -> title, data -> title);
 	//strcpy(newNode -> article -> authors, data -> authors);
-	printf("%s \n", newNode -> article -> title);
 
 	newNode -> color = RED;
 	newNode -> left = NULL;
@@ -180,14 +182,11 @@ void insert(ArticleNode **root, Article* data)
     // If the tree is empty
 	if (*root == NULL)
     {
-		//puts("Inseting, but root is NULL.");
         newNode -> color = BLACK;
         (*root) = newNode;
-		//printf("Insert root = %s \n", root -> article -> ID);
     }
     else
     {
-		//puts("Inseting, but root is not NULL.");
         ArticleNode *pointer = NULL;
         ArticleNode *cursor = (*root);
 
@@ -203,9 +202,6 @@ void insert(ArticleNode **root, Article* data)
             }
         }
         newNode -> parent = pointer;
-        // if(pointer == NULL){
-        //     (*root) = newNode;
-        // }
         if (strcmp(newNode -> article -> ID, pointer -> article -> ID) < 0){
             pointer -> left = newNode;
         }
@@ -227,5 +223,4 @@ void inorder(ArticleNode *root)
     	printf("%s ", root -> article -> ID);
     	inorder(root -> right);
 	}
-
 }
