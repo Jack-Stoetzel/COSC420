@@ -66,7 +66,7 @@ int main(){
                 size[pos] = 0;
 
                 arxiv.ID = (char*) calloc(arxiv.IDSize, sizeof(char));
-                strcpy(arxiv.ID, info, arxiv.IDSize);
+                strcpy(arxiv.ID, info);
             }
             else if(pos == 1){
                 // Title
@@ -82,24 +82,25 @@ int main(){
                 arxiv.authorSize = size[pos] + 1;
                 size[pos] = 0;
 
-                arxiv.authors = (char*) calloc(arxiv.authorSize, sizeof(char));
-                strcpy(arxiv.authors, info);
+                arxiv.author = (char*) calloc(arxiv.authorSize, sizeof(char));
+                strcpy(arxiv.author, info);
             }
             else if(pos == 4){
                 //printf("Inserting %s\n", arxiv.ID);
-                insert(&root, &arxiv);
+                articleInsert(&root, &arxiv);
                 //puts("\n In-Order \n");
                 //inorder(root);
-                printf("%s \n", arxiv.ID);
+                //printf("%s \n", arxiv.ID);
                 // printf("%s \n", arxiv.title);
                 // printf("%s \n\n", arxiv.authors);
                 //sleep(2);
                 memset(arxiv.ID, '\0', sizeof(size[0]));
                 memset(arxiv.title, '\0', sizeof(size[1]));
-                memset(arxiv.authors, '\0', sizeof(size[2]));
-                
+                memset(arxiv.author, '\0', sizeof(size[2]));
+
                 size[pos] = 0;
                 pos = -1;
+                sleep(1);
             }
             pos++;
             memset(info, '\0', sizeof(info));
