@@ -20,7 +20,7 @@ typedef struct ARTICLE
     char* title;
 	int titleSize;
 
-    char* authors;
+    char* author;
 	int authorSize;
 }Article;
 
@@ -157,7 +157,7 @@ void insertFixUp(ArticleNode **root, ArticleNode *node)
 }
 
 
-void insert(ArticleNode **root, Article* data)
+void articleInsert(ArticleNode **root, Article* data)
 {
 	// Initialize newNode and it's members
 	ArticleNode* newNode;
@@ -165,20 +165,24 @@ void insert(ArticleNode **root, Article* data)
 	newNode -> article = (Article*) malloc(sizeof(data));
 
 	newNode -> article -> ID = (char*) calloc(data -> IDSize, sizeof(char));
-    printf("%d =? %lu\n",data -> IDSize, strlen(newNode -> article -> ID));
+    //printf("%d =? %lu\n",data -> IDSize, strlen(newNode -> article -> ID));
 
 	newNode -> article -> title = (char*) calloc(data -> titleSize, sizeof(char));
-    printf("%d =? %lu\n",data -> titleSize, strlen(newNode -> article -> title));
+    //printf("%d =? %lu\n",data -> titleSize, strlen(newNode -> article -> title));
 
-	newNode -> article -> authors = (char*) calloc(data -> authorSize, sizeof(char));
-    printf("%d =? %lu\n",data -> authorSize, strlen(newNode -> article -> authors));
+	newNode -> article -> author = (char*) calloc(data -> authorSize, sizeof(char));
+	printf("Does %lu == %lu ???\n", data -> authorSize, strlen(data -> author));
+    //printf("%d =? %lu\n",data -> authorSize, strlen(newNode -> article -> author));
 
     strcpy(newNode -> article -> ID, data -> ID);
-    printf("ID = %s %lu\n",newNode -> article -> ID, strlen(newNode -> article -> ID));
+    printf("%lu\t - \t %s", strlen(newNode -> article -> ID), newNode -> article -> ID);
 
     strcpy(newNode -> article -> title, data -> title);
-	printf("title = %s %lu\n", newNode -> article -> title, strlen(newNode -> article -> title));
-    //strcpy(newNode -> article -> authors, data -> authors);
+	printf("%lu\t - \t %s", strlen(newNode -> article -> title), newNode -> article -> title);
+
+	//strcpy(newNode -> article -> author, data -> author);
+	//printf("%lu\t - \t %s", strlen(newNode -> article -> author), newNode -> article -> author);
+
 
 	newNode -> color = RED;
 	newNode -> left = NULL;
