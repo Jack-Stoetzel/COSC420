@@ -164,16 +164,21 @@ void insert(ArticleNode **root, Article* data)
 	newNode = (ArticleNode*) malloc(sizeof(ArticleNode));
 	newNode -> article = (Article*) malloc(sizeof(data));
 
-	newNode -> article -> ID = (char*) malloc(data -> IDSize * sizeof(char));
-    printf("%d =? %lu\n",data -> IDSize, sizeof(newNode -> article -> ID));
-	newNode -> article -> title = (char*) malloc(data -> titleSize * sizeof(char));
-    printf("%d =? %lu\n",data -> titleSize, sizeof(newNode -> article -> title));
-	newNode -> article -> authors = (char*) malloc(data -> authorSize * sizeof(char));
-    printf("%d =? %lu\n",data -> authorSize, sizeof(newNode -> article -> authors));
+	newNode -> article -> ID = (char*) calloc(data -> IDSize, sizeof(char));
+    printf("%d =? %lu\n",data -> IDSize, strlen(newNode -> article -> ID));
+
+	newNode -> article -> title = (char*) calloc(data -> titleSize, sizeof(char));
+    printf("%d =? %lu\n",data -> titleSize, strlen(newNode -> article -> title));
+
+	newNode -> article -> authors = (char*) calloc(data -> authorSize, sizeof(char));
+    printf("%d =? %lu\n",data -> authorSize, strlen(newNode -> article -> authors));
 
     strcpy(newNode -> article -> ID, data -> ID);
+    printf("ID = %s %lu\n",newNode -> article -> ID, strlen(newNode -> article -> ID));
+
     strcpy(newNode -> article -> title, data -> title);
-	//strcpy(newNode -> article -> authors, data -> authors);
+	printf("title = %s %lu\n", newNode -> article -> title, strlen(newNode -> article -> title));
+    //strcpy(newNode -> article -> authors, data -> authors);
 
 	newNode -> color = RED;
 	newNode -> left = NULL;

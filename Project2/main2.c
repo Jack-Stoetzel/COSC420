@@ -32,6 +32,7 @@ int main(){
     int meta;
     long long i, k = 0;
     char info[37000];
+    memset(info, '\0', sizeof(info));
 
     meta = open("arxiv-metadata.txt", O_RDONLY);
     if(meta < 0)
@@ -61,20 +62,26 @@ int main(){
             if(pos == 0){
                 // ID
                 //printf("%d - %s\n", size[0], info);
-                arxiv.IDSize = size[pos];
+                arxiv.IDSize = size[pos] + 1;
+                size[pos] = 0;
+
                 arxiv.ID = (char*) calloc(arxiv.IDSize, sizeof(char));
-                strcpy(arxiv.ID, info);
+                strcpy(arxiv.ID, info, arxiv.IDSize);
             }
             else if(pos == 1){
                 // Title
                 //printf("%d - %s\n", size[1], info);
-                arxiv.titleSize = size[pos];
+                arxiv.titleSize = size[pos] + 1;
+                size[pos] = 0;
+
                 arxiv.title = (char*) calloc(arxiv.titleSize, sizeof(char));
                 strcpy(arxiv.title, info);
             }
             else if(pos == 2){
                 // Author
-                arxiv.authorSize = size[pos];
+                arxiv.authorSize = size[pos] + 1;
+                size[pos] = 0;
+
                 arxiv.authors = (char*) calloc(arxiv.authorSize, sizeof(char));
                 strcpy(arxiv.authors, info);
             }
@@ -90,9 +97,8 @@ int main(){
                 memset(arxiv.ID, '\0', sizeof(size[0]));
                 memset(arxiv.title, '\0', sizeof(size[1]));
                 memset(arxiv.authors, '\0', sizeof(size[2]));
-                for(i = 0; i < 5; i++){
-                    size[i] = 0;
-                }
+                
+                size[pos] = 0;
                 pos = -1;
             }
             pos++;
