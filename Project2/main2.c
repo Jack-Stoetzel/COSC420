@@ -20,6 +20,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 #include "atree2.h"
 #include "wtree.h"
 
@@ -28,7 +29,9 @@ int main(){
     // Root = 1701.01948
     Article arxiv;
 
-    ArticleNode *root = NULL;
+    ArticleNode *aRoot = NULL;
+    WordNode* wRoot;
+    makeRoot(&wRoot);
     int meta;
     long long i, k = 0;
     char info[37000];
@@ -48,21 +51,36 @@ int main(){
         size[i] = 0;
     }
     while(read(meta, &buf, 1) > 0){
-        info[size[pos]] = buf;
+        if(pos == 3)
+        {
+            info[size[pos]] = tolower(buf);
+        }
+        else
+        {
+            info[size[pos]] = buf;
+        }
         size[pos]++;
         if((buf == ' ' || buf == '\n') && pos == 3){
-            // Insert word to word tree w/ ID
+            //printf("%s \n", info);
+
+            wordInsert(&wRoot, &arxiv, info, size[pos]);
+
             memset(info, '\0', sizeof(info));
+            size[pos] = 0;
+
             if(buf == '\n'){
                 pos++;
+                //printf("%s \n", wRoot -> left -> IDList -> ID);
+                //wordSearch(&wRoot, "calculation ");
+                //sleep(1);
             }
-            size[pos] = 0;
         }
         else if(buf == '\n'){
             if(pos == 0){
                 // ID
-                //printf("%d - %s\n", size[0], info);
-                arxiv.IDSize = size[pos] + 1;
+                //printf("%d - %s\n", size[pos], info);
+                info[size[pos] - 1] = '\0';
+                arxiv.IDSize = size[pos];
                 size[pos] = 0;
 
                 arxiv.ID = (char*) calloc(arxiv.IDSize, sizeof(char));
@@ -70,8 +88,9 @@ int main(){
             }
             else if(pos == 1){
                 // Title
-                //printf("%d - %s\n", size[1], info);
-                arxiv.titleSize = size[pos] + 1;
+                //printf("%d - %s\n", size[pos], info);
+                info[size[pos] - 1] = '\0';
+                arxiv.titleSize = size[pos];
                 size[pos] = 0;
 
                 arxiv.title = (char*) calloc(arxiv.titleSize, sizeof(char));
@@ -79,15 +98,21 @@ int main(){
             }
             else if(pos == 2){
                 // Author
-                arxiv.authorSize = size[pos] + 1;
+                //printf("%d - %s\n", size[pos], info);
+                info[size[pos] - 1] = '\0';
+                arxiv.authorSize = size[pos];
                 size[pos] = 0;
 
                 arxiv.author = (char*) calloc(arxiv.authorSize, sizeof(char));
                 strcpy(arxiv.author, info);
+
+                // Take off the indentation at the begining of the abstract
+                read(meta, &buf, 1);
+                read(meta, &buf, 1);
             }
             else if(pos == 4){
                 //printf("Inserting %s\n", arxiv.ID);
-                articleInsert(&root, &arxiv);
+                articleInsert(&aRoot, &arxiv);
                 //puts("\n In-Order \n");
                 //inorder(root);
                 //printf("%s \n", arxiv.ID);
@@ -100,12 +125,12 @@ int main(){
 
                 size[pos] = 0;
                 pos = -1;
-                sleep(1);
+                //sleep(1);
             }
             pos++;
             memset(info, '\0', sizeof(info));
         }
     }
-    inorder(root);
+    inorder(aRoot);
     //printf("%c \n", buf);
 }
