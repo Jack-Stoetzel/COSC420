@@ -21,7 +21,7 @@ typedef struct WNODE
     struct WNODE* right;
 }WordNode;
 
-WordNode* makeRoot(WordNode** root)
+void makeRoot(WordNode** root)
 {
     (*root) = (WordNode*) malloc(sizeof(WordNode));
     (*root) -> word = (char*) calloc(16, sizeof(char));
@@ -44,15 +44,17 @@ WordNode* checkWord(WordNode** root, char* word, int* pos)
             (*pos) = 0;
             return curr;
         }
-        else if(strcmp(curr -> word, word) < 0)
-        {
-            (*pos) = -1;
-            curr = curr -> left;
-        }
-        else if(strcmp(curr -> word, word) > 0)
+        // True if Bob, Alice
+        else if(strcmp(word, curr -> word) > 0)
         {
             (*pos) = 1;
             curr = curr -> right;
+        }
+        // True if Alice, Bob
+        else if(strcmp(word, curr -> word) < 0)
+        {
+            (*pos) = -1;
+            curr = curr -> left;
         }
     }
     return prev;
@@ -62,6 +64,8 @@ void wordInsert(WordNode** root, Article* data, char* word, int wordSize)
 {
     // First need to check if word is already in the tree
     // Position will be used to determine if a new node is need
+    //static int count = 0;
+    //printf("Inserting %s \n", word);
     int pos;
     WordNode* newNode;
     WordNode* temp = checkWord(root, word, &pos);
@@ -78,17 +82,23 @@ void wordInsert(WordNode** root, Article* data, char* word, int wordSize)
 
         if(pos == -1)
         {
+            //count++;
+            //puts("Left");
             prev -> left = newNode;
         }
         else if (pos == 1)
         {
+            //count++;
+            //puts("Right");
             prev -> right = newNode;
         }
     }
     else
     {
+        //puts("Word already exists");
         newNode = temp;
     }
+    //printf("count = %d \n", count);
     // Make a LLnode for the ID
     IDNode* newListNode = (IDNode*) malloc(sizeof(IDNode));
     newListNode -> next = NULL;
@@ -98,7 +108,7 @@ void wordInsert(WordNode** root, Article* data, char* word, int wordSize)
     IDNode* curr = newNode -> IDList;
     if(curr == NULL)
     {
-        curr = newListNode;
+        newNode -> IDList = newListNode;
     }
     else
     {
@@ -116,6 +126,51 @@ void wordInsert(WordNode** root, Article* data, char* word, int wordSize)
             curr -> next = newListNode;
         }
     }
+}
+
+void wordSearch(WordNode** root, char* word)
+{
+    WordNode* curr  = (*root);
+    int found = 0;
+    while(curr != NULL && found == 0)
+    {
+        if(strcmp(word, curr -> word) == 0)
+        {
+            found = 1;
+        }
+        else if(strcmp(word, curr -> word) < 0)
+        {
+            curr = curr -> left;
+        }
+        else if(strcmp(word, curr -> word) > 0)
+        {
+            curr = curr -> right;
+        }
+    }
+    if(found == 1)
+    {
+        IDNode* IDCurr = curr -> IDList;
+        while(IDCurr != NULL)
+        {
+            printf("%s \n", IDCurr -> ID);
+            IDCurr = IDCurr -> next;
+        }
+    }
+    else
+    {
+        puts("This word does not exist in any of the files.");
+    }
+}
+
+void preorder(WordNode *root)
+{
+    if (root == NULL)
+    {
+        return ;
+    }
+    preorder(root -> left);
+    printf("%s \n", root -> word);
+    preorder(root -> right);
 }
 
 #endif
