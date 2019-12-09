@@ -128,7 +128,7 @@ void wordInsert(WordNode** root, Article* data, char* word, int wordSize)
     }
 }
 
-void wordSearch(WordNode** root, char* word)
+void wordSearch(WordNode** root, char* word, ArticleNode** wRoot)
 {
     WordNode* curr  = (*root);
     int found = 0;
@@ -153,6 +153,9 @@ void wordSearch(WordNode** root, char* word)
         while(IDCurr != NULL)
         {
             printf("%s \n", IDCurr -> ID);
+            printInfoSearch(wRoot, IDCurr -> ID);
+            // Need to bring in aRoot and call search on aTree to print title and author
+            puts("");
             IDCurr = IDCurr -> next;
         }
     }
@@ -160,17 +163,6 @@ void wordSearch(WordNode** root, char* word)
     {
         puts("This word does not exist in any of the files.");
     }
-}
-
-void preorder(WordNode *root)
-{
-    if (root == NULL)
-    {
-        return ;
-    }
-    preorder(root -> left);
-    printf("%s \n", root -> word);
-    preorder(root -> right);
 }
 
 #endif
