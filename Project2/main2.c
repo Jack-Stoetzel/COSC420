@@ -1,28 +1,28 @@
 /*
-    arxiv-metadata.txt
-    Lines:          8,073,560
-    Words:          229,414,035
-    Chars:          1,652,562,265
-    Bytes:          1,652,562,299
+arxiv-metadata.txt
+Lines:          8,073,560
+Words:          229,414,035
+Chars:          1,652,562,265
+Bytes:          1,652,562,299
 
-    Articles:       1,614,712
-    Middle Article: 1701.01948
-    Longest Line:   36,182
+Articles:       1,614,712
+Middle Article: 1701.01948
+Longest Line:   36,182
 
-    TESTING:
-    Sequential:
-        Start Time: 11:12:00    (Prints IDs)
+TESTING:
+Sequential:
+Start Time: 11:12:00    (Prints IDs)
 
-    NOTE TO SELF:
-        Ideas for parallel:
-            Take the total number of bytes in the file and divide by world size
-            Test each block to adjust its position to an ID Line
-            Broadcast all offets to each node so they know where to start reading
-            Each node will will add its article to a RB tree
-            BONUS IDEA: if they all have RB Trees, will adding the root of one tree to another tree still work???
-                - Root has to be black, so if we insert the node to a sopt where it black, does it keep its integrity?
+NOTE TO SELF:
+Ideas for parallel:
+Take the total number of bytes in the file and divide by world size
+Test each block to adjust its position to an ID Line
+Broadcast all offets to each node so they know where to start reading
+Each node will will add its article to a RB tree
+BONUS IDEA: if they all have RB Trees, will adding the root of one tree to another tree still work???
+- Root has to be black, so if we insert the node to a sopt where it black, does it keep its integrity?
 
-        Compute the adjacentcy matrix as we insert IDs into the the word list???
+Compute the adjacentcy matrix as we insert IDs into the the word list???
 */
 #include <fcntl.h>
 #include <unistd.h>
@@ -30,7 +30,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include "atree2.h"
+
+#include "atree.h"
 #include "wtree.h"
 
 int main(int argc, char* argv[])
@@ -52,8 +53,20 @@ int main(int argc, char* argv[])
 
     int meta;
     long long i, count = 0;
-
-    int input = atoi(argv[1]);
+    long long input;
+    if(argc < 1 || argc > 2)
+    {
+        puts("Invalid input");
+        exit(1);
+    }
+    if(argc == 1)
+    {
+        input = 1614712;
+    }
+    else if(argc == 2)
+    {
+        input = (long long) atoi(argv[1]);
+    }
 
     char info[37000];
     memset(info, '\0', sizeof(info));
@@ -61,8 +74,8 @@ int main(int argc, char* argv[])
     meta = open("arxiv-metadata.txt", O_RDONLY);
     if(meta < 0)
     {
-      puts("Input file error.");
-      exit(1);
+        puts("Input file error.");
+        exit(1);
     }
 
     char buf;
@@ -71,6 +84,7 @@ int main(int argc, char* argv[])
     for(i = 0; i < 5; i++){
         size[i] = 0;
     }
+    puts("Reading in 'arxiv-metadata.txt'...");
     while(read(meta, &buf, 1) > 0 && count != input){
         if(pos == 3)
         {
