@@ -9,10 +9,6 @@ Articles:       1,614,712
 Middle Article: 1701.01948
 Longest Line:   36,182
 
-TESTING:
-Sequential:
-Start Time: 11:12:00    (Prints IDs)
-
 NOTE TO SELF:
 Ideas for parallel:
 Take the total number of bytes in the file and divide by world size
