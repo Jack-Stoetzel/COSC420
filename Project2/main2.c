@@ -1,19 +1,28 @@
 /*
     arxiv-metadata.txt
     Lines:          8,073,560
+    Words:          229,414,035
+    Chars:          1,652,562,265
+    Bytes:          1,652,562,299
+
     Articles:       1,614,712
-    Root Article:   1701.01948
+    Middle Article: 1701.01948
+    Longest Line:   36,182
 
-    TODO
-        Figure out how to add word to the word tree starting with the ID.
-            Start with (buf == ' ' || buf == '\n')??? or  (buf == ' ') at the beginning
+    TESTING:
+    Sequential:
+        Start Time: 11:12:00    (Prints IDs)
 
-        TEST THIS RB tree
-        Test inserting all articles into the list and searching an article ID
-        If the first RB tree works, make another for words with a LL for IDs with that word
+    NOTE TO SELF:
+        Ideas for parallel:
+            Take the total number of bytes in the file and divide by world size
+            Test each block to adjust its position to an ID Line
+            Broadcast all offets to each node so they know where to start reading
+            Each node will will add its article to a RB tree
+            BONUS IDEA: if they all have RB Trees, will adding the root of one tree to another tree still work???
+                - Root has to be black, so if we insert the node to a sopt where it black, does it keep its integrity?
 
-    EXTA
-        Compute the adjacentcy matrix as we insert IDs into the the word list
+        Compute the adjacentcy matrix as we insert IDs into the the word list???
 */
 #include <fcntl.h>
 #include <unistd.h>
@@ -24,16 +33,28 @@
 #include "atree2.h"
 #include "wtree.h"
 
-int main(){
-    // 1,614,712
-    // Root = 1701.01948
+int main(int argc, char* argv[])
+{
     Article arxiv;
+    // Setting the initial root to '1701.01948' so the tree can have some help balancing out at first
+    arxiv.IDSize = 11;
+    arxiv.ID = (char*) calloc(arxiv.IDSize, sizeof(char));
+    strcpy(arxiv.ID, "1701.01948");
+    arxiv.authorSize = 2;
+    arxiv.author = (char*) calloc(arxiv.authorSize, sizeof(char));
+    arxiv.titleSize = 1;
+    arxiv.title = (char*) calloc(arxiv.titleSize, sizeof(char));
 
     ArticleNode *aRoot = NULL;
+    articleInsert(&aRoot, &arxiv);
     WordNode* wRoot;
     makeRoot(&wRoot);
+
     int meta;
-    long long i, k = 0;
+    long long i, count = 0;
+
+    int input = atoi(argv[1]);
+
     char info[37000];
     memset(info, '\0', sizeof(info));
 
@@ -45,12 +66,12 @@ int main(){
     }
 
     char buf;
-    int pos = 0;    // Will determine struct element 0. ID 1. Title 2. Author 3. Abstract
+    int pos = 0;    // Will determine struct element 0.ID 1.Title 2.Author 3.Abstract 4.++++++
     int size[5];
     for(i = 0; i < 5; i++){
         size[i] = 0;
     }
-    while(read(meta, &buf, 1) > 0){
+    while(read(meta, &buf, 1) > 0 && count != input){
         if(pos == 3)
         {
             info[size[pos]] = tolower(buf);
@@ -60,25 +81,26 @@ int main(){
             info[size[pos]] = buf;
         }
         size[pos]++;
-        if((buf == ' ' || buf == '\n') && pos == 3){
+        if((buf == ' ' || buf == '\n') && pos == 3)
+        {
             //printf("%s \n", info);
-
+            info[size[pos] - 1] = '\0';
             wordInsert(&wRoot, &arxiv, info, size[pos]);
 
             memset(info, '\0', sizeof(info));
             size[pos] = 0;
 
-            if(buf == '\n'){
+            if(buf == '\n')
+            {
                 pos++;
-                //printf("%s \n", wRoot -> left -> IDList -> ID);
-                //wordSearch(&wRoot, "calculation ");
-                //sleep(1);
             }
         }
-        else if(buf == '\n'){
-            if(pos == 0){
+        else if(buf == '\n')
+        {
+            if(pos == 0)
+            {
                 // ID
-                //printf("%d - %s\n", size[pos], info);
+                //printf("%s\n", info);
                 info[size[pos] - 1] = '\0';
                 arxiv.IDSize = size[pos];
                 size[pos] = 0;
@@ -86,7 +108,8 @@ int main(){
                 arxiv.ID = (char*) calloc(arxiv.IDSize, sizeof(char));
                 strcpy(arxiv.ID, info);
             }
-            else if(pos == 1){
+            else if(pos == 1)
+            {
                 // Title
                 //printf("%d - %s\n", size[pos], info);
                 info[size[pos] - 1] = '\0';
@@ -96,7 +119,8 @@ int main(){
                 arxiv.title = (char*) calloc(arxiv.titleSize, sizeof(char));
                 strcpy(arxiv.title, info);
             }
-            else if(pos == 2){
+            else if(pos == 2)
+            {
                 // Author
                 //printf("%d - %s\n", size[pos], info);
                 info[size[pos] - 1] = '\0';
@@ -110,27 +134,42 @@ int main(){
                 read(meta, &buf, 1);
                 read(meta, &buf, 1);
             }
-            else if(pos == 4){
-                //printf("Inserting %s\n", arxiv.ID);
+            else if(pos == 4)
+            {
+                // Inserting the object into the RB Tree indexed by article ID's
                 articleInsert(&aRoot, &arxiv);
-                //puts("\n In-Order \n");
-                //inorder(root);
-                //printf("%s \n", arxiv.ID);
-                // printf("%s \n", arxiv.title);
-                // printf("%s \n\n", arxiv.authors);
-                //sleep(2);
+                // Clearing the object so the space can be reused for the next set of input
                 memset(arxiv.ID, '\0', sizeof(size[0]));
                 memset(arxiv.title, '\0', sizeof(size[1]));
                 memset(arxiv.author, '\0', sizeof(size[2]));
 
                 size[pos] = 0;
                 pos = -1;
-                //sleep(1);
+                count++;
             }
             pos++;
             memset(info, '\0', sizeof(info));
         }
     }
-    inorder(aRoot);
-    //printf("%c \n", buf);
+    int running = 1;
+    while(running)
+    {
+        char str[128];
+        printf("Enter a word to search for (enter EXIT to quit): ");
+        scanf("%s",str);
+        if(strcmp(str, "EXIT") == 0)
+        {
+            running = 0;
+        }
+        else
+        {
+            printf("\nArticles with word '%s' include (but are not limited to): \n\n", str);
+            for(i = 0; i < strlen(str); i++)
+            {
+                str[i] = tolower(str[i]);
+            }
+            wordSearch(&wRoot, str, &aRoot);
+        }
+    }
+    return 0;
 }
