@@ -15,11 +15,12 @@ Start Time: 11:12:00    (Prints IDs)
 
 NOTE TO SELF:
 Ideas for parallel:
-Take the total number of bytes in the article and divide by world size
+Take the total number of bytes in the file and divide by world size
 Test each block to adjust its position to an ID Line
-Scatter/Broadcast all offets to each node so they know where to start reading [i] and where to stop [i + 1]
+Broadcast all offets to each node so they know where to start reading
 Each node will will add its article to a RB tree
 BONUS IDEA: if they all have RB Trees, will adding the root of one tree to another tree still work???
+- Root has to be black, so if we insert the node to a sopt where it black, does it keep its integrity?
 
 Compute the adjacentcy matrix as we insert IDs into the the word list
 */
@@ -31,7 +32,7 @@ Compute the adjacentcy matrix as we insert IDs into the the word list
 #include <ctype.h>
 #include "mpi.h"
 
-#include "atree2.h"
+#include "atree.h"
 #include "wtree.h"
 
 long long findOffset(int meta, long long displ, long long sendCount)
