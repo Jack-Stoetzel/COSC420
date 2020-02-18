@@ -9,3 +9,8 @@ Most of the class was learning how to use MPI and applying it sets of matrices.
 
 * Matrix addition, subtraction, & multiplication
 * Guass-Jordan Elimination
+
+### Disclaimer
+
+Some of the code in this repository may have errors and may not run efficiently. 
+These assignments were a group effort and not all work is my own.
