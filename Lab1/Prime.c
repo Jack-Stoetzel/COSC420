@@ -32,7 +32,7 @@ given number, N, an unsigned long integer:
 
 int main(int argc, char*argv[]){
 
-MPI_Init(NULL, NULL);
+    MPI_Init(NULL, NULL);
     //---------------------------------------------------------
     char name[MPI_MAX_PROCESSOR_NAME];
     
@@ -53,15 +53,15 @@ MPI_Init(NULL, NULL);
     //---------------------------------------------------------
     int i = rank + 2;
     unsigned long int num = atoi(argv[1]);   
- 
+    
     while(num > 3 && i <= sqrt(num)){
 	//printf("Node %d (%s) is testing %d.\n", rank, name, i);
-	if(num % i == 0){
-	    printf("%d is divisible by %d.\n", num, i);
-	    MPI_Abort(communicator, 1);
-	}
-	i += world;
-    }
-    MPI_Finalize();
-    return 0;
+       if(num % i == 0){
+           printf("%d is divisible by %d.\n", num, i);
+           MPI_Abort(communicator, 1);
+       }
+       i += world;
+   }
+   MPI_Finalize();
+   return 0;
 }
