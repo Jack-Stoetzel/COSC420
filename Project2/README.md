@@ -1,4 +1,5 @@
-### Jack Stoetzel & Lauren Golian
+### Lauren Golian and Jack Stoetzel
+
 # Project 2: The Arxiv Search
 
 ## How to Run This Program
@@ -65,7 +66,7 @@ EVERYWHERE!!!
     * We tried using MPI_File_read but were having problems with segmentation faults and not reading in meaningful data. 
     * Then we tried working with lseek() and having each node start at a different point in the file. 
     This being out last attempt also failed. 
-    If we had more time we would have tried to fix this so that each node reads a part of the data and makes its own tree. 
+    If we had more time, we would have tried to fix this so that each node reads a part of the data and makes its own tree. 
     Then have all of the trees merge together to one tree in the master node. 
     The idea could work if when we combined trees, we made sure we always inserted to spot that would result in a black node. 
 
@@ -74,14 +75,14 @@ In a crunch for time, we figured being able to search for one word would be bett
 But, if two words are entered, they will result in individual list of articles that contain each word.
 
 * There is no algorithm to calculate the Page Rank or HITS.
-Since we focussed so much on reading in the meta-data file and making sure that was working, 
+Since we focused so much on reading in the meta-data file and making sure that was working, 
 the citation file and all of its data was not used. 
 
 * Author's data could be saved to the program.
 As discussed in your office hours, there is a segmentation fault when trying to insert author's information to the tree.
 ID and title work fine, but there still seems to be a problem with authors that I couldn't solve.
 
-### Would your program make a decent “Google for research papers” ?
+### Would your program make a decent “Google for research papers”?
 
 If I had 1 more month and no other responsibilities, this could be made to a very good "Google for Research Papers". 
 But in its current form, this is nothing close to Google.
@@ -90,7 +91,7 @@ But in its current form, this is nothing close to Google.
 
 ### search2
 ````
-jstoetzel1:Project2$ ./search2 100
+./search2 100
 Reading in 'arxiv-metadata.txt'...
 Enter a word to search for (enter EXIT to quit): calculation
 
